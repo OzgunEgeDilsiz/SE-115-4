@@ -1,4 +1,4 @@
-public class Main {
+public class Main_old {
     public static int factorial(int f){
         if (f==0){
             return 1;
