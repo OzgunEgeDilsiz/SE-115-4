@@ -19,7 +19,22 @@ public class Main {
     // ======== 10 REQUIRED METHODS (Students fill these) ========
 
     public static String mostProfitableCommodityInMonth(int month) {
-        return "DUMMY";
+        if (month<0 || month>=MONTHS){
+            return "INVALID_MONTH";
+        }
+        int bestCommsIndex=0;
+        int bestCommsProfit=0;
+        for (int i=0;i<COMMS;i++){
+            int sum=0;
+            for (int j=0;j<DAYS;j++) {
+                sum += profits[month][j][i];
+            }
+            if(i==0||sum>bestCommsProfit){
+                    bestCommsProfit=sum;
+                    bestCommsIndex=i;
+            }
+        }
+        return commodities[bestCommsIndex]+" "+bestCommsProfit;
     }
 
     public static int totalProfitOnDay(int month, int day) {
@@ -34,7 +49,25 @@ public class Main {
     }
 
     public static int commodityProfitInRange(String commodity, int from, int to) {
-        return 1234;
+        if(from>to || from<1 || to>DAYS){
+            return -99999;
+        }
+        int comm =-1;
+        for(int i=0;i<COMMS;i++){
+            if (commodities[i].equals(commodity)){
+                comm = i;
+            }
+        }
+        if (comm==-1){
+            return -99999;
+        }
+        int totalProfit=0;
+        for (int i=0;i<MONTHS;i++){
+            for (int f=from;f<=to;f++){
+                totalProfit+=profits[i][f-1][comm];
+            }
+        }
+        return totalProfit;
     }
 
     public static int bestDayOfMonth(int month) {
@@ -62,7 +95,24 @@ public class Main {
     }
 
     public static int daysAboveThreshold(String comm, int threshold) {
-        return 1234;
+        int commodity =-1;
+        for(int i=0;i<COMMS;i++){
+            if (commodities[i].equals(comm)){
+                commodity = i;
+            }
+        }
+        if (commodity==-1){
+            return -1;
+        }
+        int thresholdCount=0;
+        for (int i=0;i<MONTHS;i++){
+            for (int j=0;j<DAYS;j++){
+                if (profits[i][j][commodity]>threshold){
+                    thresholdCount++;
+                }
+            }
+        }
+        return thresholdCount;
     }
 
     public static int biggestDailySwing(int month) {
