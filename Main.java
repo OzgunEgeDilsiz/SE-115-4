@@ -87,11 +87,57 @@ public class Main {
     }
 
     public static String bestMonthForCommodity(String comm) {
-        return "DUMMY";
+        int commIndex =-1;
+        for(int i=0;i<COMMS;i++){
+            if (commodities[i].equals(comm)){
+                commIndex = i;
+            }
+        }
+        if (commIndex==-1){
+            return "INVALID_COMMODITY";
+        }
+        int bestMonthIndex=-1;
+        int bestMonthProfit=-99999;
+        for (int i=0;i<MONTHS;i++) {
+            int monthlyProfit=0;
+            for (int j=0;j<DAYS;j++) {
+                monthlyProfit+=profits[i][j][commIndex];
+            }
+            if (monthlyProfit>bestMonthProfit){
+                bestMonthProfit=monthlyProfit;
+                bestMonthIndex=i;
+            }
+        }
+        return months[bestMonthIndex];
     }
 
     public static int consecutiveLossDays(String comm) {
-        return 1234;
+        int commIndex =-1;
+        for(int i=0;i<COMMS;i++){
+            if (commodities[i].equals(comm)){
+                commIndex = i;
+            }
+        }
+        if (commIndex==-1){
+            return -1;
+        }
+        int currentStreak=0;
+        int maxStreak=0;
+        for (int i=0;i<MONTHS;i++){
+            for (int j=0;j<DAYS;j++){
+                int dailyProfit=profits[i][j][commIndex];
+                if (dailyProfit<0){
+                    currentStreak++;
+                    if (currentStreak>maxStreak){
+                        maxStreak=currentStreak;
+                    }
+                }
+                else{
+                    currentStreak=0;
+                }
+            }
+        }
+        return maxStreak;
     }
 
     public static int daysAboveThreshold(String comm, int threshold) {
@@ -169,7 +215,26 @@ public class Main {
     }
 
     public static String bestWeekOfMonth(int month) {
-        return "DUMMY";
+        if (month<0 || month>=MONTHS){
+            return "INVALID_MONTH";
+        }
+        int bestWeek=1;
+        int bestWeekProfit=-99999;
+        for (int i=1;i<=4;i++){
+            int weeklyProfit=0;
+            int start=7*(i-1);
+            int end=7*i;
+            for (int j=start;j<end;j++){
+                for (int c=0;c<COMMS;c++){
+                    weeklyProfit+=profits[month][j][c];
+                }
+            }
+            if (weeklyProfit>bestWeekProfit){
+                bestWeekProfit=weeklyProfit;
+                bestWeek=i;
+            }
+        }
+        return "Week "+bestWeek;
     }
 
     public static void main(String[] args) {
