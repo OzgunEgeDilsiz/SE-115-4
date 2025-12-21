@@ -1,6 +1,7 @@
 // Main.java — Students version
 import java.io.*;
 import java.util.*;
+import java.nio.file.Paths;
 
 public class Main {
     static final int MONTHS = 12;
@@ -14,7 +15,36 @@ public class Main {
 
     // ======== REQUIRED METHOD LOAD DATA (Students fill this) ========
     public static void loadData() {
+        for (int i=0;i<MONTHS;i++){
+            String fileName= months[i]+".txt";
+            try{
+                Scanner sc= new Scanner(Paths.get("Data_Files",fileName));
+                sc.nextLine();
+                while (sc.hasNextLine()){
+                    String line= sc.nextLine();
+                    String[] splitter= line.split(",");
+
+                    int day= Integer.parseInt(splitter[0]);
+                    String comm= splitter[1];
+                    int profit= Integer.parseInt(splitter[2]);
+                    int commIndex= -1;
+                    for (int j=0;j<COMMS;j++){
+                        if (commodities[j].equals(comm)){
+                            commIndex = j;
+                            break;
+                        }
+                    }
+                    if (commIndex != -1){
+                        profits[i][day-1][commIndex]=profit;
+                    }
+                }
+                sc.close();
+            }
+            catch (Exception e){
+            }
+        }
     }
+
 
     // ======== 10 REQUIRED METHODS (Students fill these) ========
 
@@ -41,11 +71,11 @@ public class Main {
         if (month<0 || month>=MONTHS || day<1 || day>DAYS){
             return -99999;
         }
-        int totalprofit = 0;
+        int totalProfit = 0;
         for (int i=0;i<COMMS;i++) {
-            totalprofit += profits[month][day - 1][i];
+            totalProfit += profits[month][day - 1][i];
         }
-        return totalprofit;
+        return totalProfit;
     }
 
     public static int commodityProfitInRange(String commodity, int from, int to) {
